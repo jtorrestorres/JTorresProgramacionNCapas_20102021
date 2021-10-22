@@ -22,6 +22,62 @@ namespace BL
         //        cmd.ExecuteNonQuery();
         //    }
         //}//
+        public static ML.Result GetAll()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnectionString()))
+                {
+                    string query = "SELECT [IdMateria],[Nombre],[Creditos],[Costo] FROM [Materia]";
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = context;
+                        cmd.CommandText = query;
+
+                        DataTable tableMateria = new DataTable();
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                        da.Fill(tableMateria);
+
+                        if (tableMateria.Rows.Count > 0)
+                        {
+                            result.Objects = new List<object>();
+
+                            foreach (DataRow row in tableMateria.Rows)
+                            {
+                                ML.Materia materia = new ML.Materia();
+                                materia.IdMateria = int.Parse(row[0].ToString());
+                                materia.Nombre = row[1].ToString();
+                                materia.Creditos = byte.Parse(row[2].ToString());
+                                materia.Costo = decimal.Parse(row[3].ToString());
+                                result.Objects.Add(materia);
+                            }
+
+                            result.Correct = true;
+
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.ErrorMessage = "No existen registros en la tabla Materia";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
         public static ML.Result Add(ML.Materia materia)
         {
             ML.Result result = new ML.Result();
@@ -85,10 +141,6 @@ namespace BL
         public static void Delete()
         {
 
-        }
-        public static void GetAll()
-        {
-
-        }
+        }        
     }
 }

@@ -22,9 +22,9 @@ namespace PL
             Console.WriteLine("Ingresa el costo de la materia");
             materia.Costo = decimal.Parse(Console.ReadLine());
 
-            ML.Result result= BL.Materia.Add(materia);
+            ML.Result result = BL.Materia.Add(materia);
 
-            if(result.Correct)
+            if (result.Correct)
             {
                 Console.WriteLine("La materia fue insertada correctamente");
             }
@@ -32,7 +32,7 @@ namespace PL
             {
                 Console.WriteLine("La materia no fue insertada correctamente. Error: " + result.ErrorMessage);
             }
-        
+
         }
         public static void Update()
         {
@@ -44,7 +44,24 @@ namespace PL
         }
         public static void GetAll()
         {
+            ML.Result result = BL.Materia.GetAll();
 
+            if (result.Correct)
+            {
+                foreach (ML.Materia materia in result.Objects)
+                {
+                    Console.WriteLine("IdMateria: " + materia.IdMateria);
+                    Console.WriteLine("Nombre: " + materia.Nombre);
+                    Console.WriteLine("Creditos: " + materia.Creditos);
+                    Console.WriteLine("Costo: " + materia.Costo);
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ocurrió un error al consultar la información" + result.ErrorMessage);
+            }
         }
     }
 }

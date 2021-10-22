@@ -10,7 +10,7 @@ namespace DL
     {
         public static string GetConnectionString()
         {
-            return System.Configuration.ConfigurationManager.ConnectionStrings["JTorresProgramacionNCapas_20102021"].ConnectionString.toString();
+            return System.Configuration.ConfigurationManager.ConnectionStrings["JTorresProgramacionNCapas_20102021"].ConnectionString.ToString();
         }
     }
 }
