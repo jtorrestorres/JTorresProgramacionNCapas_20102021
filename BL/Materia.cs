@@ -78,6 +78,65 @@ namespace BL
             return result;
         }
 
+        public static ML.Result GetById(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnectionString()))
+                {
+                    string query = "MateriaGetById";
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = context;
+                        cmd.CommandText = query;
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        SqlParameter[] collection = new SqlParameter[1];
+
+                        collection[0] = new SqlParameter("IdMateria", SqlDbType.VarChar);
+                        collection[0].Value = IdMateria;
+                        cmd.Parameters.AddRange(collection);
+                        DataTable tableMateria = new DataTable();
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                        da.Fill(tableMateria);
+
+                        if (tableMateria.Rows.Count > 0)
+                        {
+                            DataRow row = tableMateria.Rows[0];
+
+                            ML.Materia materia = new ML.Materia();
+                            materia.IdMateria = int.Parse(row[0].ToString());
+                            materia.Nombre = row[1].ToString();
+                            materia.Creditos = byte.Parse(row[2].ToString());
+                            materia.Costo = decimal.Parse(row[3].ToString());
+                            result.Object = materia; //boxing
+
+                            result.Correct = true;
+
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.ErrorMessage = "No existen registros en la tabla Materia";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
         public static ML.Result Add(ML.Materia materia)
         {
             ML.Result result = new ML.Result();
@@ -104,7 +163,7 @@ namespace BL
 
                         collection[2] = new SqlParameter("Costo", SqlDbType.Decimal);
                         collection[2].Value = materia.Costo;
-                     
+
                         cmd.Parameters.AddRange(collection);
 
                         cmd.Connection.Open();
@@ -141,6 +200,6 @@ namespace BL
         public static void Delete()
         {
 
-        }        
+        }
     }
 }

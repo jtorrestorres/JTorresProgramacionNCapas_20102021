@@ -63,5 +63,30 @@ namespace PL
                 Console.WriteLine("Ocurrió un error al consultar la información" + result.ErrorMessage);
             }
         }
+
+
+        public static void GetById()
+        {
+            ML.Result result = BL.Materia.GetById(2);
+
+            if (result.Correct)
+            {
+
+                //unboxing 
+                ML.Materia materia = ((ML.Materia)result.Object);
+
+                Console.WriteLine("IdMateria: " + materia.IdMateria);
+                Console.WriteLine("Nombre: " + materia.Nombre);
+                Console.WriteLine("Creditos: " + materia.Creditos);
+                Console.WriteLine("Costo: " + materia.Costo);
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine();
+
+            }
+            else
+            {
+                Console.WriteLine("Ocurrió un error al consultar la información" + result.ErrorMessage);
+            }
+        }
     }
 }
