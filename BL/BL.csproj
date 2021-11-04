@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,10 @@
     <ProjectReference Include="..\DL\DL.csproj">
       <Project>{fa99f898-4de4-4f36-8a04-4ead7d6f331e}</Project>
       <Name>DL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DL_EF\DL_EF.csproj">
+      <Project>{f7000644-d50a-46df-a5d9-70f9f9dac79f}</Project>
+      <Name>DL_EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\ML\ML.csproj">
       <Project>{5ed89b43-0345-4028-84cb-f1e931ee227e}</Project>

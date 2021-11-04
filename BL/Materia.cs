@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.Objects;
 
 namespace BL
 {
@@ -193,13 +194,50 @@ namespace BL
 
             return result;
         }
-        public static void Update()
-        {
 
+        //public static ML.Result AddEF(ML.Materia materia)
+        //{
+        //    ML.Result result = new ML.Result();
+
+        //    try
+        //    {
+        //        using (DL_EF.JTorresProgramacionNCapas_20102021Entities context = new DL_EF.JTorresProgramacionNCapas_20102021Entities())
+        //        {
+        //            //identity
+        //            ObjectParameter IdMateria = new ObjectParameter("myOutputParamBool", typeof(bool));
+        //            var query = context.MateriaAdd(materia.Nombre, materia.Creditos, materia.Costo, IdMateria);
+
+
+        //            if (query >= 1)
+        //            {
+        //                result.Correct = true;
+        //            }
+        //            else
+        //            {
+        //                result.Correct = false;
+        //                result.ErrorMessage = "No se insertó el registro";
+        //            }
+
+        //            result.Correct = true;
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result.Correct = false;
+        //        result.ErrorMessage = ex.Message;
+        //    }
+        //    return result;
+        //}
+
+
+        public static ML.Result Update(ML.Materia materia)
+        {
+            return new ML.Result();
         }
-        public static void Delete()
+        public static ML.Result Delete(int IdMateria)
         {
-
+            return new ML.Result();
         }
     }
 }
