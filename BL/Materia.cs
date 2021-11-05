@@ -37,27 +37,25 @@ namespace BL
                     {
                         cmd.Connection = context;
                         cmd.CommandText = query;
+                        cmd.Connection.Open();
 
-                        DataTable tableMateria = new DataTable();
+                        SqlDataReader reader = cmd.ExecuteReader();
 
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-                        da.Fill(tableMateria);
-
-                        if (tableMateria.Rows.Count > 0)
+                        if (reader!=null)
                         {
                             result.Objects = new List<object>();
 
-                            foreach (DataRow row in tableMateria.Rows)
+                            while (reader.Read())
                             {
                                 ML.Materia materia = new ML.Materia();
-                                materia.IdMateria = int.Parse(row[0].ToString());
-                                materia.Nombre = row[1].ToString();
-                                materia.Creditos = byte.Parse(row[2].ToString());
-                                materia.Costo = decimal.Parse(row[3].ToString());
-                                result.Objects.Add(materia);
+                                materia.IdMateria = reader.GetInt32(0);
+                                materia.Nombre = reader.GetString(1);
+                                materia.Creditos = reader.GetByte(2);
+                                materia.Costo = reader.GetDecimal(3);
+                                result.Objects.Add(materia);                              
                             }
 
+                           
                             result.Correct = true;
 
                         }

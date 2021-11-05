@@ -25,8 +25,14 @@ namespace PL_MVC.Controllers
         {
             ML.Materia materia = new ML.Materia();
 
+            ML.Result resultSemestre = BL.Semestre.GetAll();
+            materia.Semestre = new ML.Semestre();
+            materia.Semestre.Semestres = resultSemestre.Objects;
+
+
             if (IdMateria == null) //Add
-            {
+            { 
+                
                 return View(materia);
             }
             else //Update
@@ -86,7 +92,7 @@ namespace PL_MVC.Controllers
 
 
             }
-            return PartialView("ModalPV");
+            return View("Modal");
         }
 
         [HttpGet]
@@ -103,7 +109,7 @@ namespace PL_MVC.Controllers
                 ViewBag.Mensaje = "La materia no se ha eliminado correctamente " + result.ErrorMessage;
             }
 
-            return PartialView("ModalPV");
+            return PartialView("Modal");
         }
     }
 }
