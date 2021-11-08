@@ -31,7 +31,7 @@ namespace BL
             {
                 using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnectionString()))
                 {
-                    string query = "SELECT [IdMateria],[Nombre],[Creditos],[Costo] FROM [Materia]";
+                    string query = "SELECT [IdMateria],[Nombre],[Creditos],[Costo], [Imagen] FROM [Materia] WHERE IdMateria=1014";
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
@@ -52,6 +52,23 @@ namespace BL
                                 materia.Nombre = reader.GetString(1);
                                 materia.Creditos = reader.GetByte(2);
                                 materia.Costo = reader.GetDecimal(3);
+
+                               // var x = reader.GetByte(4);
+                                var y = reader.GetSqlValue(4);
+                                var z = reader.GetValue(4);
+                                var a = reader.GetStream(4);
+                                var b = (byte[])reader["Imagen"];
+
+                                if (b.Length ==0)
+                                {
+                                    materia.Imagen = null;
+                                }
+                                else
+                                {
+                                    materia.Imagen = (byte[])reader["Imagen"];
+                                }
+                                // materia.Imagen = reader.GetValue(4) != "" ? (byte[])reader.GetValue(4) : null;
+
                                 result.Objects.Add(materia);                              
                             }
 
@@ -145,14 +162,14 @@ namespace BL
             {
                 using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnectionString()))
                 {
-                    string query = "INSERT INTO [Materia]([Nombre],[Creditos],[Costo] )VALUES (@Nombre, @Creditos, @Costo)";
+                    string query = "INSERT INTO [Materia]([Nombre],[Creditos],[Costo], [Imagen] )VALUES (@Nombre, @Creditos, @Costo, @Imagen)";
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
                         cmd.Connection = context;
                         cmd.CommandText = query;
 
-                        SqlParameter[] collection = new SqlParameter[3];
+                        SqlParameter[] collection = new SqlParameter[4];
 
                         collection[0] = new SqlParameter("Nombre", SqlDbType.VarChar);
                         collection[0].Value = materia.Nombre;
@@ -162,6 +179,9 @@ namespace BL
 
                         collection[2] = new SqlParameter("Costo", SqlDbType.Decimal);
                         collection[2].Value = materia.Costo;
+
+                        collection[3] = new SqlParameter("Imagen", SqlDbType.VarBinary);
+                        collection[3].Value = materia.Imagen;
 
                         cmd.Parameters.AddRange(collection);
 

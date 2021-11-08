@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace PL_MVC.Controllers
 {
+    
     public class MateriaController : Controller
     {
         // GET: Materia
@@ -20,6 +21,17 @@ namespace PL_MVC.Controllers
             return View(materia);
         }
 
+        public byte[] ConvertToBytes(HttpPostedFileBase Imagen)
+        {
+            byte[] data = null;
+            System.IO.BinaryReader reader = new System.IO.BinaryReader(Imagen.InputStream);
+            data = reader.ReadBytes((int)Imagen.ContentLength);
+
+            return data;
+        }
+
+
+
         [HttpGet]
         public ActionResult Form(int? IdMateria)
         {
@@ -28,6 +40,8 @@ namespace PL_MVC.Controllers
             ML.Result resultSemestre = BL.Semestre.GetAll();
             materia.Semestre = new ML.Semestre();
             materia.Semestre.Semestres = resultSemestre.Objects;
+
+         
 
 
             if (IdMateria == null) //Add
@@ -63,6 +77,12 @@ namespace PL_MVC.Controllers
         public ActionResult Form(ML.Materia materia)
         {
             ML.Result result = new ML.Result();
+
+            HttpPostedFileBase file = Request.Files["ImagenData"];
+            if (file.ContentLength > 0)
+            {
+                materia.Imagen = ConvertToBytes(file);
+            }
 
             if (materia.IdMateria == 0)
             {

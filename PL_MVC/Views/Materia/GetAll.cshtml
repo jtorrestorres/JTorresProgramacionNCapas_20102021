@@ -32,6 +32,7 @@
                         <td>Nombre</td>
                         <td>Creditos</td>
                         <td>Costo</td>
+                        <td>Imagen</td>
                         <td>Eliminar</td>
                     </tr>
                 </thead>
@@ -44,6 +45,16 @@
                             <td>@materia.Nombre</td>
                             <td>@materia.Creditos</td>
                             <td>@materia.Costo</td>
+                            <td>
+                                @if (materia.Imagen == null)
+                                {
+                                    <img id="ImagenPreview" src="~/img/imagenDefault.png" style=" height:150px; width:150px;" />
+                                }
+                                else
+                                {
+                                    <img id="ImagenPreview" src="data:image/jpeg;base64,@Convert.ToBase64String(materia.Imagen)" width="100" height="100" />
+                                }
+                            </td>
                             <td><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Materia", new { IdMateria= materia.IdMateria})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
                         </tr>
                     }
@@ -60,5 +71,5 @@
 
 
 @*@{
-    Html.RenderPartial("Modal");
-}*@
+        Html.RenderPartial("Modal");
+    }*@
