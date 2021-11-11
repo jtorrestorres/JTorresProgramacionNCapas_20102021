@@ -16,5 +16,7 @@ namespace ML
         public ML.Semestre Semestre { get; set; }
 
         public byte[] Imagen { get; set; }
+
+        public string Action { get; set; }
     }
 }

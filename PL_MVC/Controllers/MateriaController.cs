@@ -6,18 +6,34 @@ using System.Web.Mvc;
 
 namespace PL_MVC.Controllers
 {
-    
+   
+
     public class MateriaController : Controller
     {
         // GET: Materia
         [HttpGet]
         public ActionResult GetAll()
         {
-            ML.Result result = BL.Materia.GetAll();
 
+            ML.Result result = BL.Materia.GetAll();
+            ML.Result resultSemestre = BL.Semestre.GetAll();
             ML.Materia materia = new ML.Materia();
             materia.Materias = result.Objects;
+            materia.Semestre = new ML.Semestre();
 
+            materia.Semestre.Semestres = resultSemestre.Objects;
+            return View(materia);
+        }
+
+        [HttpPost]
+        public ActionResult GetAll(ML.Materia materia)
+        {
+
+            ML.Result result = BL.Materia.GetAll(); //GetByIdSemestre(IdSemestre)
+
+            materia.Materias = result.Objects;
+            ML.Result resultSemestre = BL.Semestre.GetAll();
+            materia.Semestre.Semestres = resultSemestre.Objects;
             return View(materia);
         }
 
@@ -45,12 +61,13 @@ namespace PL_MVC.Controllers
 
 
             if (IdMateria == null) //Add
-            { 
-                
+            {
+                materia.Action = "Add";
                 return View(materia);
             }
             else //Update
             {
+                materia.Action = "Update";
                 ML.Result result = new ML.Result();
                 result = BL.Materia.GetById(IdMateria.Value);
                 if (result.Correct)
@@ -84,7 +101,7 @@ namespace PL_MVC.Controllers
                 materia.Imagen = ConvertToBytes(file);
             }
 
-            if (materia.IdMateria == 0)
+            if (materia.Action == "Add")
             {
                 result = BL.Materia.Add(materia);
                 if (result.Correct)

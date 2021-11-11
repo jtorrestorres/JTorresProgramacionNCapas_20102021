@@ -5,6 +5,32 @@
 }
 
 <div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">                   
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Semestre)
+                            @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Selecciona una opción", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Semestre)
+                        </div>
+                    </div>                   
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input type="submit" value="Buscar" class="btn btn-info" />
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <h2>Materias</h2>
