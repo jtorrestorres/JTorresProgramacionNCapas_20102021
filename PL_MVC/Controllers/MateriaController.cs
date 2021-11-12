@@ -14,10 +14,13 @@ namespace PL_MVC.Controllers
         [HttpGet]
         public ActionResult GetAll()
         {
-
-            ML.Result result = BL.Materia.GetAll();
-            ML.Result resultSemestre = BL.Semestre.GetAll();
             ML.Materia materia = new ML.Materia();
+            materia.Semestre = new ML.Semestre();
+
+            ML.Result result = BL.Materia.GetAll(materia);
+
+            ML.Result resultSemestre = BL.Semestre.GetAll();
+
             materia.Materias = result.Objects;
             materia.Semestre = new ML.Semestre();
 
@@ -29,7 +32,7 @@ namespace PL_MVC.Controllers
         public ActionResult GetAll(ML.Materia materia)
         {
 
-            ML.Result result = BL.Materia.GetAll(); //GetByIdSemestre(IdSemestre)
+            ML.Result result = BL.Materia.GetAll(materia); //GetByIdSemestre(IdSemestre)
 
             materia.Materias = result.Objects;
             ML.Result resultSemestre = BL.Semestre.GetAll();

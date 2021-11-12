@@ -23,7 +23,7 @@ namespace BL
         //        cmd.ExecuteNonQuery();
         //    }
         //}//
-        public static ML.Result GetAll()
+        public static ML.Result GetAll(ML.Materia materia)
         {
             ML.Result result = new ML.Result();
 
@@ -31,12 +31,21 @@ namespace BL
             {
                 using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnectionString()))
                 {
-                    string query = "SELECT [IdMateria],[Nombre],[Creditos],[Costo], [Imagen] FROM [Materia] WHERE IdMateria=1014";
+                    string query = "MateriaGetAll";
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
                         cmd.Connection = context;
                         cmd.CommandText = query;
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+
+                        SqlParameter[] collection = new SqlParameter[1];
+
+                        collection[0] = new SqlParameter("IdSemestre", SqlDbType.Int);
+                        collection[0].Value = materia.Semestre.IdSemestre;
+                        cmd.Parameters.AddRange(collection);
+
                         cmd.Connection.Open();
 
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -47,7 +56,7 @@ namespace BL
 
                             while (reader.Read())
                             {
-                                ML.Materia materia = new ML.Materia();
+                                materia = new ML.Materia();
                                 materia.IdMateria = reader.GetInt32(0);
                                 materia.Nombre = reader.GetString(1);
                                 materia.Creditos = reader.GetByte(2);
@@ -57,16 +66,16 @@ namespace BL
                                 var y = reader.GetSqlValue(4);
                                 var z = reader.GetValue(4);
                                 var a = reader.GetStream(4);
-                                var b = (byte[])reader["Imagen"];
+                                //var b = (byte[])reader["Imagen"];
 
-                                if (b.Length ==0)
-                                {
-                                    materia.Imagen = null;
-                                }
-                                else
-                                {
-                                    materia.Imagen = (byte[])reader["Imagen"];
-                                }
+                                //if (b.Length ==0)
+                                //{
+                                //    materia.Imagen = null;
+                                //}
+                                //else
+                                //{
+                                //    materia.Imagen = (byte[])reader["Imagen"];
+                                //}
                                 // materia.Imagen = reader.GetValue(4) != "" ? (byte[])reader.GetValue(4) : null;
 
                                 result.Objects.Add(materia);                              
@@ -91,7 +100,7 @@ namespace BL
                 result.Ex = ex;
             }
 
-            return result;
+                return result;
         }
 
         public static ML.Result GetById(int IdMateria)
