@@ -14,35 +14,42 @@
         </div>
     </div>
 
-    <div class="row">
 
-        @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-        <div class="form-inline">
-            <div class="col-md-1">
-                @Html.LabelFor(model => model.Semestre)
+    @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.Semestre)
+                </div>
+                <div class="col-md-3">
+
+                    @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Selecciona una opción", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Semestre)
+                </div>
+
             </div>
-            <div class="col-md-3">
-
-                @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Selecciona una opción", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Semestre)
-            </div>
-
-            <div class="col-md-3">
-
-                @*@Html.TextBoxFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Selecciona una opción", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Semestre)*@
-            </div>
-
-
-            <div class="col-md-1">
-                <input type="submit" value="Buscar" class="btn btn-info" />
+        </div>
+        <br />
+        <div class="row">
+            <div class="form-inline">
+                <div class="col-md-3">
+                   @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", autocomplete = "off", placeholder="Nombre"})
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.Nombre, "{0:#.#}", new { @class = "form-control", autocomplete = "off", placeholder = "Créditos" })
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" value="Buscar" class="btn btn-info" />
+                </div>
             </div>
         </div>
 
 
-        }
-    </div>
+
+    }
+
     <div class="row">
         <div class="col-md-6">
             <h5>Seleccione + para registrar una materia ... o eliminar para b</h5>
