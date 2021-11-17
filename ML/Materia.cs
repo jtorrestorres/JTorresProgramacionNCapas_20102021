@@ -18,5 +18,6 @@ namespace ML
         public byte[] Imagen { get; set; }
 
         public string Action { get; set; }
+        public string FechaRegistro { get; set; }
     }
 }
