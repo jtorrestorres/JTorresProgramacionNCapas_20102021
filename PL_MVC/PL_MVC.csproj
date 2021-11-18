@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MateriaCargaMasivaController.cs" />
     <Compile Include="Controllers\MateriaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -167,9 +168,11 @@
     <Content Include="Views\Materia\GetAll.cshtml" />
     <Content Include="Views\Materia\Form.cshtml" />
     <Content Include="Views\Materia\Modal.cshtml" />
+    <Content Include="Views\MateriaCargaMasiva\CargaMasiva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ExcelCargaMasivaMaterias\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

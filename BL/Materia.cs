@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.OleDb;
 using System.Data.Objects;
 
 namespace BL
@@ -266,5 +267,35 @@ namespace BL
         {
             return new ML.Result();
         }
+
+        public static DataTable ConvertXSLXtoDataTable(string strFilePath, string connString)
+        {
+            OleDbConnection oledbConn = new OleDbConnection(connString);
+            DataTable dt = new DataTable();
+            try
+            {
+
+                oledbConn.Open();
+                using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM [Sheet1$]", oledbConn))
+                {
+                    OleDbDataAdapter da = new OleDbDataAdapter();
+                    da.SelectCommand = cmd;
+                    
+                    da.Fill(dt);                    
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+
+                oledbConn.Close();
+            }
+
+            return dt;
+
+        }
+
     }
 }
