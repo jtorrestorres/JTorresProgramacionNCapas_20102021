@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
-
+using System.Data;
 
 namespace PL_MVC.Controllers
 {
@@ -23,7 +23,7 @@ namespace PL_MVC.Controllers
         {
             HttpPostedFileBase file = Request.Files["ExcelMaterias"];
 
-            if (file.ContentLength > 0)
+            if (file.ContentLength > 0)//Si el usuario seleccionó un excel
             {
                 string extension = Path.GetExtension(file.FileName).ToLower();
                 if (extension == ".xlsx")
@@ -32,11 +32,43 @@ namespace PL_MVC.Controllers
 
                     if (!System.IO.File.Exists(direccionExcel))
                     {
-                        file.SaveAs(direccionExcel);
                         //string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + direccionExcel + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                        string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Extended Properties=Excel 12.0 XML;Data Source=" + direccionExcel + ";";
 
-                        BL.Materia.ConvertXSLXtoDataTable(direccionExcel, connString);
+                        try
+                        {
+                            file.SaveAs(direccionExcel);
+                            string CadenaConexion= System.Configuration.ConfigurationManager.AppSettings["ConexionExcel"].ToString();
+                            string ConnectionString = CadenaConexion + direccionExcel;
+
+                            ML.Result resultDataTable= BL.Materia.ConvertToDataTable(direccionExcel, ConnectionString);
+                            
+                            if (resultDataTable.Correct)
+                            {
+                                DataTable tableEmpleado = (DataTable)resultDataTable.Object;//unboxing
+                                ML.Result resultValidarExcel = BL.Materia.ValidarExcel(tableEmpleado);
+                                if (resultValidarExcel.Correct)
+                                {
+                                    //foreach insertar
+                                }
+                                else
+                                {
+                                    ML.ErrorExcel error = new ML.ErrorExcel();
+                                    error.Errores = resultValidarExcel.Objects;
+                                    return View(error);
+                                }
+                            }
+
+
+                        }
+                        catch(Exception ex)
+                        {
+                            ViewBag.Message = ex.Message;
+                        }
+                        
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Ya existe el nombre del archivo, por favor renombrarlo";
                     }
 
                 }

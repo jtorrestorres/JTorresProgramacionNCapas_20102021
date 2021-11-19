@@ -48,10 +48,10 @@ namespace BL
                         cmd.Parameters.AddRange(collection);
 
                         cmd.Connection.Open();
-
+                        SqlDataAdapter da = new SqlDataAdapter();
                         SqlDataReader reader = cmd.ExecuteReader();
 
-                        if (reader!=null)
+                        if (reader != null)
                         {
                             result.Objects = new List<object>();
 
@@ -63,7 +63,7 @@ namespace BL
                                 materia.Creditos = reader.GetByte(2);
                                 materia.Costo = reader.GetDecimal(3);
 
-                               // var x = reader.GetByte(4);
+                                // var x = reader.GetByte(4);
                                 var y = reader.GetSqlValue(4);
                                 var z = reader.GetValue(4);
                                 var a = reader.GetStream(4);
@@ -79,10 +79,10 @@ namespace BL
                                 //}
                                 // materia.Imagen = reader.GetValue(4) != "" ? (byte[])reader.GetValue(4) : null;
 
-                                result.Objects.Add(materia);                              
+                                result.Objects.Add(materia);
                             }
                             //S
-                           
+
                             result.Correct = true;
 
                         }
@@ -101,7 +101,7 @@ namespace BL
                 result.Ex = ex;
             }
 
-                return result;
+            return result;
         }
 
         public static ML.Result GetById(int IdMateria)
@@ -268,52 +268,122 @@ namespace BL
             return new ML.Result();
         }
 
-        public static ML.Result ConvertXSLXtoDataTable(string strFilePath, string connString)
+        public static ML.Result ConvertToDataTable(string strFilePath, string connString)
         {
             ML.Result result = new ML.Result();
-
-            OleDbConnection oledbConn = new OleDbConnection(connString);
-            DataTable dt = new DataTable();
+            
             try
             {
-
-                oledbConn.Open();
-                using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM [Sheet1$]", oledbConn))
+                using (OleDbConnection context = new OleDbConnection(connString))
                 {
-                    OleDbDataAdapter da = new OleDbDataAdapter();
-                    da.SelectCommand = cmd;
-                    
-                    da.Fill(dt);
-                    result.Objects = new List<object>();
-
-                    foreach(DataRow row in dt.Rows)
+                    string query = "SELECT * FROM [Sheet1$]";
+                    using (OleDbCommand cmd = new OleDbCommand())
                     {
-                        ML.ErrorExcel error = new ML.ErrorExcel();
+                        cmd.CommandText = query;
+                        cmd.Connection = context;
 
-                        if (row[0] != "")
+
+                        OleDbDataAdapter da = new OleDbDataAdapter();
+                        da.SelectCommand = cmd;
+                        DataTable tableEmpleado = new DataTable();
+
+                        da.Fill(tableEmpleado);
+
+                        result.Object = tableEmpleado;
+
+                        if (tableEmpleado.Rows.Count > 1)
                         {
-                            error.Message = "Por favor ingresar el nombre";
+                            result.Correct = true;
                         }
-                        if (row[1] != "")
+                        else
                         {
-                            error.Message = "Por favor ingresar el apellido paterno";
+                            result.Correct = false;
+                            result.ErrorMessage = "No existen registros en el excel";
                         }
-                        result.Objects.Add(error);
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                
             }
-            finally
-            {
+           
+            return result;
 
-                oledbConn.Close();
+        }
+
+
+        public static ML.Result ValidarExcel(DataTable tableEmpleado)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                result.Objects = new List<object>();
+                //DataTable  //Rows //Columns
+                foreach(DataRow row in tableEmpleado.Rows)
+                {
+                    ML.ErrorExcel error = new ML.ErrorExcel();
+
+                    if (row[0].ToString() == "")
+                    {
+                        error.Message += "Por favor ingresar el número de empleado";
+                    }
+                    if (row[1].ToString() == "")
+                    {
+                        error.Message += "Por favor ingresar el nombre del empleado";
+                    }
+                    if (row[2].ToString() == "")
+                    {
+                        error.Message += "Por favor ingresar el Apellido Paterno del empleado";
+                    }
+                    if (row[3].ToString() == "")
+                    {
+                        error.Message += "Por favor ingresar el Apellido Materno del empleado";
+                    }
+                    if (row[4].ToString() == "")
+                    {
+                        error.Message += "Por favor ingresar el Email del empleado";
+                    }
+
+                    //error.Message += (row[4].ToString() == "") ? "Por favor ingresar el Email del empleado" : "";
+
+                    if (error.Message!=null)
+                    {
+                        result.Objects.Add(error);
+                    }
+                    
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+
             }
 
             return result;
 
         }
+        //result.Objects = new List<object>();
+
+        //foreach(DataRow row in dt.Rows)
+        //{
+        //    ML.ErrorExcel error = new ML.ErrorExcel();
+
+        //    if (row[0] != "")
+        //    {
+        //        error.Message = "Por favor ingresar el nombre";
+        //    }
+        //    if (row[1] != "")
+        //    {
+        //        error.Message = "Por favor ingresar el apellido paterno";
+        //    }
+        //    result.Objects.Add(error);
+        //}
 
     }
 }
