@@ -268,8 +268,10 @@ namespace BL
             return new ML.Result();
         }
 
-        public static DataTable ConvertXSLXtoDataTable(string strFilePath, string connString)
+        public static ML.Result ConvertXSLXtoDataTable(string strFilePath, string connString)
         {
+            ML.Result result = new ML.Result();
+
             OleDbConnection oledbConn = new OleDbConnection(connString);
             DataTable dt = new DataTable();
             try
@@ -281,10 +283,26 @@ namespace BL
                     OleDbDataAdapter da = new OleDbDataAdapter();
                     da.SelectCommand = cmd;
                     
-                    da.Fill(dt);                    
+                    da.Fill(dt);
+                    result.Objects = new List<object>();
+
+                    foreach(DataRow row in dt.Rows)
+                    {
+                        ML.ErrorExcel error = new ML.ErrorExcel();
+
+                        if (row[0] != "")
+                        {
+                            error.Message = "Por favor ingresar el nombre";
+                        }
+                        if (row[1] != "")
+                        {
+                            error.Message = "Por favor ingresar el apellido paterno";
+                        }
+                        result.Objects.Add(error);
+                    }
                 }
             }
-            catch
+            catch(Exception ex)
             {
             }
             finally
@@ -293,7 +311,7 @@ namespace BL
                 oledbConn.Close();
             }
 
-            return dt;
+            return result;
 
         }
 

@@ -14,7 +14,7 @@ namespace PL_MVC.Controllers
         [HttpGet]
         public ActionResult CargaMasiva()
         {
-            ML.Materia materia = new ML.Materia();
+            ML.ErrorExcel materia = new ML.ErrorExcel();
             return View(materia);
         }
 
@@ -33,7 +33,9 @@ namespace PL_MVC.Controllers
                     if (!System.IO.File.Exists(direccionExcel))
                     {
                         file.SaveAs(direccionExcel);
-                        string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + direccionExcel + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                        //string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + direccionExcel + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                        string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Extended Properties=Excel 12.0 XML;Data Source=" + direccionExcel + ";";
+
                         BL.Materia.ConvertXSLXtoDataTable(direccionExcel, connString);
                     }
 
