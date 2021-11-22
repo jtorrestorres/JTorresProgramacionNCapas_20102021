@@ -12,5 +12,6 @@ namespace ML
         public string Message { get; set; }
         public List<object> Errores { get; set; }
         public bool Correct { get; set; }
+        public ML.Usuario Usuario { get; set; }
     }
 }

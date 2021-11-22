@@ -41,14 +41,14 @@
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Nombre)
                         @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre" })
-                        @Html.ValidationMessageFor(model => model.Nombre)
+                        @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger" } )
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Creditos)
                         @Html.TextBoxFor(model => model.Creditos, "{0:#.#}", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Creditos)
+                        @Html.ValidationMessageFor(model => model.Creditos,null, new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Semestre)
                         @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Selecciona una opción", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Semestre)
+                        @Html.ValidationMessageFor(model => model.Semestre.IdSemestre)
                     </div>
                 </div>
 
@@ -78,7 +78,7 @@
                             @Html.TextBoxFor(model => model.FechaRegistro, new { @class = "form-control", @id = "txtFechaRegistro" })
 
                         </div>
-                        @Html.ValidationMessageFor(model => model.Creditos)
+                        @Html.ValidationMessageFor(model => model.FechaRegistro)
                     </div>
                 </div>
 

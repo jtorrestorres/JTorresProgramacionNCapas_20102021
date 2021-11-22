@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace PL_MVC.Controllers
 {
-   
+
 
     public class MateriaController : Controller
     {
@@ -60,7 +60,7 @@ namespace PL_MVC.Controllers
             materia.Semestre = new ML.Semestre();
             materia.Semestre.Semestres = resultSemestre.Objects;
 
-         
+
 
 
             if (IdMateria == null) //Add
@@ -104,52 +104,66 @@ namespace PL_MVC.Controllers
                 materia.Imagen = ConvertToBytes(file);
             }
 
-            if (materia.Action == "Add")
+            if (ModelState.IsValid)
             {
-                result = BL.Materia.Add(materia);
-                if (result.Correct)
+                if (materia.Action == "Add")
                 {
-                    ViewBag.Mensaje = "La materia se ha registrado correctamente";
+                    result = BL.Materia.Add(materia);
+                    if (result.Correct)
+                    {
+                        ViewBag.Mensaje = "La materia se ha registrado correctamente";
+                    }
+                    else
+                    {
+                        ViewBag.Mensaje = "La materia no se ha registrado correctamente " + result.ErrorMessage;
+                    }
+
                 }
                 else
                 {
-                    ViewBag.Mensaje = "La materia no se ha registrado correctamente " + result.ErrorMessage;
-                }
+                    result = BL.Materia.Update(materia);
 
+                    if (result.Correct)
+                    {
+                        ViewBag.Mensaje = "La materia se ha actualizado correctamente";
+                    }
+                    else
+                    {
+                        ViewBag.Mensaje = "La materia no se ha actualizado correctamente " + result.ErrorMessage;
+                    }
+
+
+                }
             }
             else
             {
-                result = BL.Materia.Update(materia);
+                materia = new ML.Materia();
 
-                if (result.Correct)
-                {
-                    ViewBag.Mensaje = "La materia se ha actualizado correctamente";
-                }
-                else
-                {
-                    ViewBag.Mensaje = "La materia no se ha actualizado correctamente " + result.ErrorMessage;
-                }
+                ML.Result resultSemestre = BL.Semestre.GetAll();
+                materia.Semestre = new ML.Semestre();
+                materia.Semestre.Semestres = resultSemestre.Objects;
 
-
+                return View(materia);
             }
             return View("Modal");
+
         }
 
         [HttpGet]
-        public ActionResult Delete(int IdMateria)
-        {
-            ML.Result result = BL.Materia.Delete(IdMateria);
-
-            if (result.Correct)
+            public ActionResult Delete(int IdMateria)
             {
-                ViewBag.Mensaje = "La materia se ha eliminado correctamente";
-            }
-            else
-            {
-                ViewBag.Mensaje = "La materia no se ha eliminado correctamente " + result.ErrorMessage;
-            }
+                ML.Result result = BL.Materia.Delete(IdMateria);
 
-            return PartialView("Modal");
+                if (result.Correct)
+                {
+                    ViewBag.Mensaje = "La materia se ha eliminado correctamente";
+                }
+                else
+                {
+                    ViewBag.Mensaje = "La materia no se ha eliminado correctamente " + result.ErrorMessage;
+                }
+
+                return PartialView("Modal");
+            }
         }
     }
-}
