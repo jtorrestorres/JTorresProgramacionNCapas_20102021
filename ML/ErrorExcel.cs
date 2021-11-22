@@ -11,5 +11,6 @@ namespace ML
         public int IdRegistro { get; set; }
         public string Message { get; set; }
         public List<object> Errores { get; set; }
+        public bool Correct { get; set; }
     }
 }

@@ -329,23 +329,23 @@ namespace BL
 
                     if (row[0].ToString() == "")
                     {
-                        error.Message += "Por favor ingresar el número de empleado";
+                        error.Message += "Por favor ingresar el número de empleado ";
                     }
                     if (row[1].ToString() == "")
                     {
-                        error.Message += "Por favor ingresar el nombre del empleado";
+                        error.Message += "Por favor ingresar el nombre del empleado ";
                     }
                     if (row[2].ToString() == "")
                     {
-                        error.Message += "Por favor ingresar el Apellido Paterno del empleado";
+                        error.Message += "Por favor ingresar el Apellido Paterno del empleado ";
                     }
                     if (row[3].ToString() == "")
                     {
-                        error.Message += "Por favor ingresar el Apellido Materno del empleado";
+                        error.Message += "Por favor ingresar el Apellido Materno del empleado ";
                     }
                     if (row[4].ToString() == "")
                     {
-                        error.Message += "Por favor ingresar el Email del empleado";
+                        error.Message += "Por favor ingresar el Email del empleado ";
                     }
 
                     //error.Message += (row[4].ToString() == "") ? "Por favor ingresar el Email del empleado" : "";
@@ -354,7 +354,8 @@ namespace BL
                     {
                         result.Objects.Add(error);
                     }
-                    
+
+                    result.Correct = true;
 
                 }
             }

@@ -15,73 +15,123 @@ namespace PL_MVC.Controllers
         public ActionResult CargaMasiva()
         {
             ML.ErrorExcel materia = new ML.ErrorExcel();
+            materia.Errores = new List<object>();
+            if (Session["RutaExcel"]!=null)
+            {
+                materia.Correct = true;
+            }
             return View(materia);
         }
 
         [HttpPost]
-        public ActionResult CargaMasiva(ML.Materia materia)
+        public ActionResult CargaMasiva(ML.ErrorExcel errorItem)
         {
-            HttpPostedFileBase file = Request.Files["ExcelMaterias"];
-
-            if (file.ContentLength > 0)//Si el usuario seleccionó un excel
+            if (Session["RutaExcel"] != null) //Que ya tiene la ruta del archivo
             {
-                string extension = Path.GetExtension(file.FileName).ToLower();
-                if (extension == ".xlsx")
+                string direccionExcel = (string)Session["RutaExcel"];
+                string CadenaConexion = System.Configuration.ConfigurationManager.AppSettings["ConexionExcel"].ToString();
+                string ConnectionString = CadenaConexion + direccionExcel;
+
+
+                ML.Result resultDataTable = BL.Materia.ConvertToDataTable(direccionExcel, ConnectionString);
+
+                if (resultDataTable.Correct)
                 {
-                    string direccionExcel = Server.MapPath("~/ExcelCargaMasivaMaterias/") + Path.GetFileNameWithoutExtension(file.FileName) + '-' + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-
-                    if (!System.IO.File.Exists(direccionExcel))
+                    string ErrorMessage = "";
+                    DataTable tableEmpleado = (DataTable)resultDataTable.Object;//unboxing
+                    foreach(DataRow row in tableEmpleado.Rows)
                     {
-                        //string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + direccionExcel + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                        ML.Materia materia = new ML.Materia(); //Empleado
+                        materia.Nombre = row[0].ToString();
+                        materia.Costo = decimal.Parse(row[1].ToString());
 
-                        try
+                        ML.Result resultMateria = BL.Materia.Add(materia);
+                        if (!resultMateria.Correct)
                         {
-                            file.SaveAs(direccionExcel);
-                            string CadenaConexion= System.Configuration.ConfigurationManager.AppSettings["ConexionExcel"].ToString();
-                            string ConnectionString = CadenaConexion + direccionExcel;
-
-                            ML.Result resultDataTable= BL.Materia.ConvertToDataTable(direccionExcel, ConnectionString);
-                            
-                            if (resultDataTable.Correct)
-                            {
-                                DataTable tableEmpleado = (DataTable)resultDataTable.Object;//unboxing
-                                ML.Result resultValidarExcel = BL.Materia.ValidarExcel(tableEmpleado);
-                                if (resultValidarExcel.Correct)
-                                {
-                                    //foreach insertar
-                                }
-                                else
-                                {
-                                    ML.ErrorExcel error = new ML.ErrorExcel();
-                                    error.Errores = resultValidarExcel.Objects;
-                                    return View(error);
-                                }
-                            }
-
-
+                            ErrorMessage += resultMateria.ErrorMessage;
                         }
-                        catch(Exception ex)
-                        {
-                            ViewBag.Message = ex.Message;
-                        }
-                        
+                    }
+
+                    if (ErrorMessage == "")
+                    {
+                        ViewBag.Message = "Los empleados han sido cargados correctamente";
                     }
                     else
                     {
-                        ViewBag.Message = "Ya existe el nombre del archivo, por favor renombrarlo";
+                        ViewBag.Message = "Ocurrió un error al insertar los empleados" + ErrorMessage;
                     }
+                   
+                }
 
-                }
-                else
-                {
-                    ViewBag.Message = "Seleccione un archivo con extensión .xlsx";
-                }
+                //Cargar el archivo
             }
             else
             {
-                ViewBag.Message = "Seleccione un archivo";
+                //Validar el archivo
+                HttpPostedFileBase file = Request.Files["ExcelMaterias"];
+
+                if (file.ContentLength > 0)//Si el usuario seleccionó un excel
+                {
+                    string extension = Path.GetExtension(file.FileName).ToLower();
+                    if (extension == ".xlsx")
+                    {
+                        string direccionExcel = Server.MapPath("~/ExcelCargaMasivaMaterias/") + Path.GetFileNameWithoutExtension(file.FileName) + '-' + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+
+                        if (!System.IO.File.Exists(direccionExcel))
+                        {
+                            //string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + direccionExcel + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+
+                            try
+                            {
+
+                                file.SaveAs(direccionExcel);
+                                Session["RutaExcel"] = direccionExcel;
+                                string CadenaConexion = System.Configuration.ConfigurationManager.AppSettings["ConexionExcel"].ToString();
+                                string ConnectionString = CadenaConexion + direccionExcel;
+
+                                ML.Result resultDataTable = BL.Materia.ConvertToDataTable(direccionExcel, ConnectionString);
+
+                                if (resultDataTable.Correct)
+                                {
+                                    DataTable tableEmpleado = (DataTable)resultDataTable.Object;//unboxing
+                                    ML.Result resultValidarExcel = BL.Materia.ValidarExcel(tableEmpleado);
+                                    if (!resultValidarExcel.Correct) //si hubo errores
+                                    {
+                                        ML.ErrorExcel error = new ML.ErrorExcel();
+                                        error.Errores = resultValidarExcel.Objects;
+                                        return View(error);
+                                    }
+                                    else
+                                    {
+                                        ViewBag.Message = "Todos los registros han sido validados correctamente, puede proceder a cargarlos";
+                                    }
+                                }
+
+
+                            }
+                            catch (Exception ex)
+                            {
+                                ViewBag.Message = ex.Message;
+                            }
+
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Ya existe el nombre del archivo, por favor renombrarlo";
+                        }
+
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Seleccione un archivo con extensión .xlsx";
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Seleccione un archivo";
+                }
             }
-            return View();
+            return PartialView("Modal");
         }
     }
-    }
+}
