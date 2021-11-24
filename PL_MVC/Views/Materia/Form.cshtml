@@ -59,15 +59,16 @@
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Creditos)
-                        @Html.TextBoxFor(model => model.Creditos, "{0:#.#}", new { @class = "form-control", @id = "txtCreditos", @onkeypress = "return SoloNumeros(event)" })
+                        @Html.TextBoxFor(model => model.Creditos, "{0:#.#}", new { @class = "form-control txtCreditosClase", @id = "txtCreditos", @onkeypress = "return SoloNumeros(event)", @onblur = "VerificarRango()" })
                         @Html.ValidationMessageFor(model => model.Creditos, null, new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.Nombre, new { @class = "text-danger", @style = "display:none", @id = "lblErrorCreditos" })
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Costo)
-                        @Html.TextBoxFor(model => model.Costo, "{0:#.#}", new { @class = "form-control" })
+                        @Html.TextBoxFor(model => model.Costo, "{0:#.#}", new { @class = "form-control txtCreditosClase" })
                         @Html.ValidationMessageFor(model => model.Costo, null, new { @class = "text-danger" })
                     </div>
                 </div>
@@ -171,7 +172,24 @@
     //        return false;
     //    }
     //}
+    function VerificarRango() {
+        //Selectores en CSS/jQuery
+        var txtCreditos = document.getElementById("txtCreditos");//.value//JavaScript (1)
+        var txtCreditos1 = document.getElementsByClassName("txtCreditosClase");//JavaScript (2)
 
+        var txtCreditos2 = $("#txtCreditos").val();
+        var txtCreditos3 = $(".txtCreditosClase").val();
+
+        if (!(txtCreditos.value >= 1 && txtCreditos.value <= 100)) {
+                $("#lblErrorCreditos").text('El valor de los créditos debe de estar entre un rango de 1 y 1000');
+                $('#lblErrorCreditos').css('display', 'block');
+        }
+
+
+        
+
+    }
+    
     function SoloLetras(e) {
         var letra = e.onkeypress.arguments[0].key;
         if (!/[^a-zA-Z]/.test(letra)) {
