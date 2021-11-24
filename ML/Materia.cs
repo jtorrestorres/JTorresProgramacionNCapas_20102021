@@ -12,13 +12,20 @@ namespace ML
 
         [Required]
         public string Nombre { get; set; }
+
+
+        public string Descripcion { get; set; }
+
         [Required(ErrorMessage = "Ingrese los créditos")]
         public byte Creditos { get; set; }
         [Required(ErrorMessage ="Ingrese el costo")]
+        [Range(1,30, ErrorMessage ="Debe ingresar un valor entre 1 y 30")]
         //[DataType(DataType.EmailAddress)]
         //[EmailAddress]
         //[RegularExpression("^[a-z0-9_\\+-]+(\\.[a-z0-9_\\+-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*\\.([a-z]{2,4})$", ErrorMessage = "Invalid email format.")]
         public decimal Costo { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
         public List<object> Materias { get; set; }
         public ML.Semestre Semestre { get; set; }
 
