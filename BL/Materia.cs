@@ -172,14 +172,14 @@ namespace BL
             {
                 using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnectionString()))
                 {
-                    string query = "INSERT INTO [Materia]([Nombre],[Creditos],[Costo], [Imagen] )VALUES (@Nombre, @Creditos, @Costo, @Imagen)";
+                    string query = "INSERT INTO [Materia]([Nombre],[Creditos],[Costo])VALUES (@Nombre, @Creditos, @Costo)";
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
                         cmd.Connection = context;
                         cmd.CommandText = query;
 
-                        SqlParameter[] collection = new SqlParameter[4];
+                        SqlParameter[] collection = new SqlParameter[3];
 
                         collection[0] = new SqlParameter("Nombre", SqlDbType.VarChar);
                         collection[0].Value = materia.Nombre;
@@ -190,8 +190,8 @@ namespace BL
                         collection[2] = new SqlParameter("Costo", SqlDbType.Decimal);
                         collection[2].Value = materia.Costo;
 
-                        collection[3] = new SqlParameter("Imagen", SqlDbType.VarBinary);
-                        collection[3].Value = materia.Imagen;
+                        //collection[3] = new SqlParameter("Imagen", SqlDbType.VarBinary);
+                        //collection[3].Value = materia.Imagen;
 
                         cmd.Parameters.AddRange(collection);
 
