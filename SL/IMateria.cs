@@ -12,7 +12,9 @@ namespace SL
     {
         [OperationContract]
         SL.Result Add(ML.Materia materia);
+        [OperationContract]
         SL.Result Update(ML.Materia materia);
+        [OperationContract]
         SL.Result Delete(int IdMateria);
     }
 }

@@ -64,9 +64,9 @@ namespace BL
                                 materia.Costo = reader.GetDecimal(3);
 
                                 // var x = reader.GetByte(4);
-                                var y = reader.GetSqlValue(4);
-                                var z = reader.GetValue(4);
-                                var a = reader.GetStream(4);
+                                //var y = reader.GetSqlValue(4);
+                                //var z = reader.GetValue(4);
+                                //var a = reader.GetStream(4);
                                 //var b = (byte[])reader["Imagen"];
 
                                 //if (b.Length ==0)

@@ -22,7 +22,11 @@ namespace PL
             Console.WriteLine("Ingresa el costo de la materia");
             materia.Costo = decimal.Parse(Console.ReadLine());
 
-            ML.Result result = BL.Materia.Add(materia);
+            ServiceMateria.MateriaClient objServicioMateria = new ServiceMateria.MateriaClient();
+            //TimeOut  -WebConfig -9 seg -> 18 seg
+            //
+            ServiceMateria.Result result = objServicioMateria.Add(materia); 
+            //ML.Result result = BL.Materia.Add(materia);
 
             if (result.Correct)
             {

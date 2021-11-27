@@ -47,8 +47,6 @@ namespace SL
                 Objects = result.Objects
             };
         }
-
-
         public SL.Result Delete(int IdMateria)
         {
             ML.Result result = BL.Materia.Delete(IdMateria);
