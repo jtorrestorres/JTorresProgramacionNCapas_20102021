@@ -25,7 +25,7 @@ namespace PL
             ServiceMateria.MateriaClient objServicioMateria = new ServiceMateria.MateriaClient();
             //TimeOut  -WebConfig -9 seg -> 18 seg
             //
-            ServiceMateria.Result result = objServicioMateria.Add(materia); 
+            ServiceMateria.Result result = objServicioMateria.Add(materia);  // Consumo de servicio WCF
             //ML.Result result = BL.Materia.Add(materia);
 
             if (result.Correct)

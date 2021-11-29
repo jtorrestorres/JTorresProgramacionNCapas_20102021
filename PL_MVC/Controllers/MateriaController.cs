@@ -17,9 +17,13 @@ namespace PL_MVC.Controllers
             ML.Materia materia = new ML.Materia();
             materia.Semestre = new ML.Semestre();
 
-            ML.Result result = BL.Materia.GetAll(materia);
-
+            ML.Result result = BL.Materia.GetAll(materia);//WebAPI
+            //SL_WebAPI.Materia.GetAll();
             ML.Result resultSemestre = BL.Semestre.GetAll();
+
+            //URL
+            //Verb
+            //Body
 
             materia.Materias = result.Objects;
             materia.Semestre = new ML.Semestre();

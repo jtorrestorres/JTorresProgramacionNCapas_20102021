@@ -19,6 +19,12 @@ namespace SL_WebAPI.Controllers
             materia.Semestre = new ML.Semestre();
             materia.Nombre = "";
             ML.Result result= BL.Materia.GetAll(materia);
+            
+            int numero = 1;
+            object obj = numero; //boxing
+
+            numero = (int)obj; //unboxing
+
 
             if (result.Correct)
             {
