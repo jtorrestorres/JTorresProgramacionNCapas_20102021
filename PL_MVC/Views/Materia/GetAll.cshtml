@@ -35,7 +35,7 @@
         <div class="row">
             <div class="form-inline">
                 <div class="col-md-3">
-                   @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", autocomplete = "off", placeholder="Nombre"})
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", autocomplete = "off", placeholder = "Nombre" })
                 </div>
                 <div class="col-md-3">
                     @Html.TextBoxFor(model => model.Nombre, "{0:#.#}", new { @class = "form-control", autocomplete = "off", placeholder = "Créditos" })
@@ -73,6 +73,7 @@
                         <td>Creditos</td>
                         <td>Costo</td>
                         <td>Imagen</td>
+                        <td>Status</td>
                         <td>Eliminar</td>
                     </tr>
                 </thead>
@@ -93,6 +94,17 @@
                                 else
                                 {
                                     <img id="ImagenPreview" src="data:image/jpeg;base64,@Convert.ToBase64String(materia.Imagen)" width="100" height="100" />
+                                }
+                            </td>
+                            <td>
+                                @if (materia.Status) //true
+                                {
+                                    @*<img id="ImagenPreview" src="~/img/imagenDefault.png" style=" height:150px; width:150px;" />*@
+                                    <a class="btn btn-success glyphicon glyphicon-ok" href="@Url.Action("UpdateStatus", "Materia", new { IdMateria= materia.IdMateria})" ></a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-danger glyphicon glyphicon-remove" href="@Url.Action("UpdateStatus", "Materia", new { IdMateria= materia.IdMateria})"></a>
                                 }
                             </td>
                             <td><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Materia", new { IdMateria= materia.IdMateria})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>

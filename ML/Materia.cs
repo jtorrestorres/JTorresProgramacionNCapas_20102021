@@ -36,5 +36,7 @@ namespace ML
         [Required]//decoradores
         [Display(Name ="Fecha de registro")]
         public string FechaRegistro { get; set; }
+        public bool Status { get; set; }  //drop down list
+        public string Password { get; set; }
     }
 }

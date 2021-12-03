@@ -26,6 +26,9 @@ namespace BL
         //}//
         public static ML.Result GetAll(ML.Materia materia)
         {
+            //string saludo; //DECLARE
+            //saludo= "Hola Jesús"; //SET
+
             ML.Result result = new ML.Result();
 
             try
@@ -62,7 +65,7 @@ namespace BL
                                 materia.Nombre = reader.GetString(1);
                                 materia.Creditos = reader.GetByte(2);
                                 materia.Costo = reader.GetDecimal(3);
-
+                                materia.Status= reader.GetBoolean(4);
                                 // var x = reader.GetByte(4);
                                 //var y = reader.GetSqlValue(4);
                                 //var z = reader.GetValue(4);
@@ -101,7 +104,7 @@ namespace BL
                 result.Ex = ex;
             }
 
-            return result;
+                return result;
         }
 
         public static ML.Result GetById(int IdMateria)
@@ -140,6 +143,7 @@ namespace BL
                             materia.Nombre = row[1].ToString();
                             materia.Creditos = byte.Parse(row[2].ToString());
                             materia.Costo = decimal.Parse(row[3].ToString());
+                            materia.Status = bool.Parse(row[4].ToString());
                             result.Object = materia; //boxing
 
                             result.Correct = true;
@@ -163,7 +167,7 @@ namespace BL
             return result;
         }
 
-        public static ML.Result Add(ML.Materia materia)
+        public static ML.Result Add(ML.Materia materia) //
         {
             ML.Result result = new ML.Result();
 
@@ -176,19 +180,19 @@ namespace BL
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
-                        cmd.Connection = context;
-                        cmd.CommandText = query;
+                        cmd.Connection = context;//conexión
+                        cmd.CommandText = query;//query a executar--insert
 
                         SqlParameter[] collection = new SqlParameter[3];
 
                         collection[0] = new SqlParameter("Nombre", SqlDbType.VarChar);
-                        collection[0].Value = materia.Nombre;
+                        collection[0].Value = materia.Nombre; //Matemáticas
 
                         collection[1] = new SqlParameter("Creditos", SqlDbType.TinyInt);
-                        collection[1].Value = materia.Creditos;
+                        collection[1].Value = materia.Creditos;//10
 
                         collection[2] = new SqlParameter("Costo", SqlDbType.Decimal);
-                        collection[2].Value = materia.Costo;
+                        collection[2].Value = materia.Costo;//1982
 
                         //collection[3] = new SqlParameter("Imagen", SqlDbType.VarBinary);
                         //collection[3].Value = materia.Imagen;

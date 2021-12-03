@@ -169,5 +169,44 @@ namespace PL_MVC.Controllers
 
                 return PartialView("Modal");
             }
+        [HttpGet]
+        public ActionResult UpdateStatus(int IdMateria)
+        {
+            ML.Result resultMateria = BL.Materia.GetById(IdMateria);
+
+            ML.Materia materia = new ML.Materia();
+            materia=((ML.Materia)resultMateria.Object);
+            //materia.IdMateria = ((ML.Materia)resultMateria.Object).IdMateria;
+            //materia.Nombre = ((ML.Materia)resultMateria.Object).Nombre;
+
+            if(materia.Status)
+            {
+                materia.Status = false;
+            }
+            else
+            {
+                materia.Status = true;
+            }
+
+            //UpdateStatus //
+
+
+            //GetById
+            ML.Result result = BL.Materia.Update(materia);
+
+            if (result.Correct)
+            {
+                ViewBag.Mensaje = "La materia se ha eliminado correctamente";
+            }
+            else
+            {
+                ViewBag.Mensaje = "La materia no se ha eliminado correctamente " + result.ErrorMessage;
+            }
+
+            return PartialView("Modal");
         }
+    
+}
+
+
     }

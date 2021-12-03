@@ -51,11 +51,32 @@
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Descripcion, new { @class = "", @id = "lblDescripcion" })
                         @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control", @id = "txtDescripcion", @onkeypress = "return SoloLetras(this)" })
-                        @Html.LabelFor(model => model.Descripcion, new { @class = "text-danger", @style="display:none", @id = "lblErrorDescripcion" })
+                        @Html.LabelFor(model => model.Descripcion, new { @class = "text-danger", @style = "display:none", @id = "lblErrorDescripcion" })
 
                         @*@Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger", @onkeypress="return SoloLetras(this)"} )*@
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Email, new { @class = "", @id = "lblEmail" })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "txtEmail", @onblur = "return ValidarEmail(this)" })
+                        @Html.LabelFor(model => model.Email, new { @class = "text-danger", @style = "display:none", @id = "lblErrorEmail" })
+
+                        @*@Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger", @onkeypress="return SoloLetras(this)"} )*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Email, new { @class = "", @id = "lblEmailConfirm" })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "txtEmailConfirm", @onblur = "return MatchEmail(this)" })
+                        @Html.LabelFor(model => model.Email, new { @class = "text-danger", @style = "display:none", @id = "lblErrorEmailConfirm" })
+
+                        @*@Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger", @onkeypress="return SoloLetras(this)"} )*@
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Creditos)
@@ -186,10 +207,37 @@
         }
 
 
-        
+
 
     }
-    
+
+    function ValidarEmail() {
+
+        var txtEmail = $("#txtEmail");
+        var regexToEmail = /^(([^<>()[\]\\.,;:\s@@"]+(\.[^<>()[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (regexToEmail.test(txtEmail.val()) ) {
+            //Es un email correcto
+            $('#txtEmail').css('border-color', 'green');
+        }
+        else {
+            $('#txtEmail').css('border-color', 'red');
+        }
+
+       
+    }
+
+    function MatchEmail() {
+        var txtEmail = $("#txtEmail");
+        var txtEmailConfirm = $("#txtEmailConfirm");
+        if (  txtEmail.val() == txtEmailConfirm.val() ) {
+            //Es un email correcto
+            $('#txtEmailConfirm').css('border-color', 'green');
+        }
+        else {
+            $('#txtEmailConfirm').css('border-color', 'red');
+        }
+
+    }
     function SoloLetras(e) {
         var letra = e.onkeypress.arguments[0].key;
         if (!/[^a-zA-Z]/.test(letra)) {
@@ -236,5 +284,5 @@
 
 
 
-    
+
 </script>
